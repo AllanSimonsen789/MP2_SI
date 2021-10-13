@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+    reports:
+        build: report-con
+        ports:
+            - "6969:8072"
+        links:
+            - mongodb
+    assignments:
+        build: ass-con
+        ports:
+            - "42069:8060"
+        links:
+            - mongodb
+    students:
+        build: student-con
+        ports:
+            - "21420:8070"
+        links:
+            - mongodb
+    mongodb:
+        image: mongo
