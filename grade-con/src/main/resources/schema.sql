@@ -3,6 +3,6 @@ CREATE TABLE GRADE
 (
     gid  LONG PRIMARY KEY,
     eid LONG NOT NULL,
-    sid LONG NOT NULL,
+    sid VARCHAR (25) NOT NULL,
     grade LONG NOT NULL
 );

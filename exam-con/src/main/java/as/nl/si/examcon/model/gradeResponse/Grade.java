@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Grade {
     private long eid;
-    private long sid;
+    private String sid;
     private long grade;
     private GradeLinks links;
 
@@ -19,12 +19,12 @@ public class Grade {
     }
 
     @JsonProperty("sid")
-    public long getSid() {
+    public String getSid() {
         return sid;
     }
 
     @JsonProperty("sid")
-    public void setSid(long value) {
+    public void setSid(String value) {
         this.sid = value;
     }
 

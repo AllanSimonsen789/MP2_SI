@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static as.nl.si.examcon.logic.ExamGradeController.examPassed;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -56,42 +57,10 @@ public class ExamController {
         EntityModel<Exam> exam = retrieveExam(id);
         ExamDto examDto = new ExamDto(exam.getContent());
 
-        try {
-            //return getResponseCodeForURLUsing("http://localhost:8042/exams", "GET");
-            HttpURLConnection.setFollowRedirects(false); // Set follow redirects to false
-            final URL url = new URL("http://localhost:8070/students");
-            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-            huc.setRequestMethod("GET");
-            String jsonStudents = GetResponseBody.GetResponseBody(huc);
-            StudentResponse data = ConverterStudent.fromJsonString(jsonStudents);
-            examDto.setStudentList(Arrays.stream(data.getEmbedded().getStudents()).toList());
-
-            //Getgrades
-            HttpURLConnection.setFollowRedirects(false); // Set follow redirects to false
-            final URL gradeUrl = new URL("http://localhost:8040/grades");
-            HttpURLConnection guc = (HttpURLConnection) gradeUrl.openConnection();
-            guc.setRequestMethod("GET");
-            String jsonGrades = GetResponseBody.GetResponseBody(guc);
-            GradeReponse gdata = ConverterGrade.fromJsonString(jsonGrades);
-            examDto.setGradelist(Arrays.stream(gdata.getEmbedded().getGrades()).toList());
-
-        } catch (ProtocolException | MalformedURLException e) {
-            e.printStackTrace();
-        }
+        examDto = examPassed(examDto);
         EntityModel<ExamDto> examEntity = EntityModel.of(examDto);
         examEntity.add(exam.getLinks());
         return examEntity;
-
-        /*Optional<Student> student = repo.findById(id);
-        if (!student.isPresent())
-            throw new StudentNotFoundException("id: " + id);
-
-        EntityModel<Student> resource = EntityModel.of(student.get()); 						// get the resource
-        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllStudents()); // get link
-        resource.add(linkTo.withRel("all-students"));										// append the link
-
-        Link selfLink = linkTo(methodOn(this.getClass()).retrieveStudent(id)).withSelfRel(); //add also link to self
-        resource.add(selfLink);*/
 
     }
 

@@ -15,8 +15,7 @@ public class ExamDto {
     private String examName;
     private String examDate;
 
-    private List<Student> studentList;
-    private List<Grade> gradelist;
+    private List<StudentDTO> studentList;
 
     public ExamDto(Exam exam) {
         super();
