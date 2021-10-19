@@ -34,6 +34,7 @@ public class ExamGradeController {
             HttpURLConnection huc = (HttpURLConnection) url.openConnection();
             huc.setRequestMethod("GET");
             String jsonStudents = GetResponseBody.GetResponseBody(huc);
+            System.out.println("testingSometinhg: " + jsonStudents);
             StudentResponse data = ConverterStudent.fromJsonString(jsonStudents);
             studentList = new ArrayList<>(Arrays.stream(data.getEmbedded().getStudents()).toList());
 
