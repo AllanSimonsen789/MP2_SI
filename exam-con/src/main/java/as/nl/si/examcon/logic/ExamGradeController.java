@@ -10,7 +10,6 @@ import as.nl.si.examcon.model.gradeResponse.GradeReponse;
 import as.nl.si.examcon.model.studentResponse.Student;
 import as.nl.si.examcon.model.studentResponse.StudentResponse;
 
-import org.apache.commons.collections.IteratorUtils;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -24,13 +23,15 @@ import java.util.List;
 public class ExamGradeController {
 
     public static ExamDto examPassed(ExamDto examDto) throws IOException {
+        System.out.println("Hello There");
         List<StudentDTO> studDTOList = new ArrayList<>();
         List<Student> studentList;
         List<Grade> gradeList;
         try {
             //return getResponseCodeForURLUsing("http://localhost:8042/exams", "GET");
             HttpURLConnection.setFollowRedirects(false); // Set follow redirects to false
-            final URL url = new URL("http://localhost:8070/students");
+            System.out.println("http://students:8070/students");
+            final URL url = new URL("http://students:8070/students");
             HttpURLConnection huc = (HttpURLConnection) url.openConnection();
             huc.setRequestMethod("GET");
             String jsonStudents = GetResponseBody.GetResponseBody(huc);
@@ -39,7 +40,7 @@ public class ExamGradeController {
 
             //Getgrades
             HttpURLConnection.setFollowRedirects(false); // Set follow redirects to false
-            final URL gradeUrl = new URL("http://localhost:8040/grades");
+            final URL gradeUrl = new URL("http://grades:8040/grades");
             HttpURLConnection guc = (HttpURLConnection) gradeUrl.openConnection();
             guc.setRequestMethod("GET");
             String jsonGrades = GetResponseBody.GetResponseBody(guc);

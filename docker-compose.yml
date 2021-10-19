@@ -3,20 +3,38 @@ services:
     reports:
         build: report-con
         ports:
-            - "6969:8072"
+            - 8095:8072
         links:
             - mongodb
     assignments:
         build: ass-con
         ports:
-            - "42069:8060"
+            - 8091:8060
         links:
             - mongodb
     students:
         build: student-con
         ports:
-            - "21420:8070"
+            - 8092:8070
         links:
             - mongodb
+    grades:
+        build: grade-con
+        ports:
+            - 8093:8040
+        links:
+            - mongodb
+    exams:
+        build: exam-con
+        ports:
+            - 8094:8042
+        links:
+            - mongodb
+    teachers:
+        build: teach-con
+        ports:
+            - 8096:8050
+        links:
+            - mongodb  
     mongodb:
         image: mongo
