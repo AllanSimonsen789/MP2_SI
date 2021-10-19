@@ -8,17 +8,13 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class Assignment {
+public class AssignmentStudent {
 
     @Id
     @GeneratedValue
-    private long aid;
-    private String aname;
-    private int astudypoints;
+    private Long asid;
+    private Long aid;
+    private String smail;
 
-    public Assignment() {
-        super();
-    }
+    public AssignmentStudent() { super(); }
 }
-
-

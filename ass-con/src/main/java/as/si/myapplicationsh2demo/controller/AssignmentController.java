@@ -1,35 +1,59 @@
 package as.si.myapplicationsh2demo.controller;
 
 import as.si.myapplicationsh2demo.exceptions.AssignmentNotFoundException;
+import as.si.myapplicationsh2demo.logic.AssignmentStudentController;
 import as.si.myapplicationsh2demo.model.Assignment;
+import as.si.myapplicationsh2demo.model.AssignmentDTO;
+import as.si.myapplicationsh2demo.model.AssignmentStudent;
 import as.si.myapplicationsh2demo.repository.AssignmentRepository;
 
+import as.si.myapplicationsh2demo.repository.AssignmentStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import java.io.IOException;
+import java.net.*;
 import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@ComponentScan
 @RestController
 @RequestMapping("/assignment")
 public class AssignmentController {
 
     @Autowired
     AssignmentRepository repo;
+    @Autowired
+    AssignmentStudentRepository asrepo;
 
     @GetMapping("/")
-    public List<Assignment> retrieveAllAssignements()
+    public List<Assignment> retrieveAllAssignments()
     {
         return repo.findAll();
+    }
+
+    @GetMapping("/{id}/notdone")
+    public EntityModel<AssignmentDTO> retrieveNrOfStudentsNotCompletedAssignment(@PathVariable long id) throws IOException {
+        EntityModel<Assignment> assignment = retrieveAssignment(id);
+        AssignmentDTO assignmentDTO = new AssignmentDTO(0, assignment.getContent());
+        AssignmentStudentController asc = new AssignmentStudentController();
+        List<AssignmentStudent> assStudList = asrepo.findAll();
+
+        assignmentDTO = asc.assignmentNotCompleted(assignmentDTO, assStudList);
+        EntityModel<AssignmentDTO> assignmentEntity = EntityModel.of(assignmentDTO);
+        assignmentEntity.add(assignment.getLinks());
+        return assignmentEntity;
     }
 
     // This is the only method, which returns hyperlinks, for now
@@ -42,7 +66,7 @@ public class AssignmentController {
             throw new AssignmentNotFoundException("id: " + id);
 
         EntityModel<Assignment> resource = EntityModel.of(assignment.get()); 						// get the resource
-        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllAssignements()); // get link
+        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllAssignments()); // get link
         resource.add(linkTo.withRel("all-assignments"));										// append the link
 
         Link selfLink = linkTo(methodOn(this.getClass()).retrieveAssignment(id)).withSelfRel(); //add also link to self
