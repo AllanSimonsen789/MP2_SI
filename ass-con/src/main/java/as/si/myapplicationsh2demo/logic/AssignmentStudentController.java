@@ -32,7 +32,7 @@ public class AssignmentStudentController {
         try {
             //return getResponseCodeForURLUsing("http://localhost:8042/exams", "GET");
             HttpURLConnection.setFollowRedirects(false); // Set follow redirects to false
-            final URL url = new URL("http://localhost:8070/students");
+            final URL url = new URL("http://students:8070/students");
             HttpURLConnection huc = (HttpURLConnection) url.openConnection();
             huc.setRequestMethod("GET");
             String jsonStudents = GetResponseBody.GetResponseBody(huc);

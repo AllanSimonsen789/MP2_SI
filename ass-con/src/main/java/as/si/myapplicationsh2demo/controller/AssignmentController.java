@@ -45,6 +45,7 @@ public class AssignmentController {
 
     @GetMapping("/{id}/notdone")
     public EntityModel<AssignmentDTO> retrieveNrOfStudentsNotCompletedAssignment(@PathVariable long id) throws IOException {
+        System.out.println("HELLO!");
         EntityModel<Assignment> assignment = retrieveAssignment(id);
         AssignmentDTO assignmentDTO = new AssignmentDTO(0, assignment.getContent());
         AssignmentStudentController asc = new AssignmentStudentController();
