@@ -1,40 +1,50 @@
 version: "3.7"
 services:
+    eureka-server:
+        build: EurekaServer
+        ports:
+            - "8761:8761"
     reports:
         build: report-con
         ports:
             - 8095:8072
         links:
             - mongodb
+            - eureka-server
     assignments:
         build: ass-con
         ports:
             - 8091:8060
         links:
             - mongodb
+            - eureka-server
     students:
         build: student-con
         ports:
             - 8092:8070
         links:
             - mongodb
+            - eureka-server
     grades:
         build: grade-con
         ports:
             - 8093:8040
         links:
             - mongodb
+            - eureka-server
     exams:
         build: exam-con
         ports:
             - 8094:8042
         links:
             - mongodb
+            - eureka-server
     teachers:
         build: teach-con
         ports:
             - 8096:8050
         links:
             - mongodb  
+            - eureka-server
     mongodb:
         image: mongo

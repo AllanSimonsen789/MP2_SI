@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
@@ -36,6 +37,8 @@ public class AssignmentController {
     AssignmentRepository repo;
     @Autowired
     AssignmentStudentRepository asrepo;
+    @Autowired
+    RestTemplate restTemplate;
 
     @GetMapping("/")
     public List<Assignment> retrieveAllAssignments()
@@ -51,7 +54,7 @@ public class AssignmentController {
         AssignmentStudentController asc = new AssignmentStudentController();
         List<AssignmentStudent> assStudList = asrepo.findAll();
 
-        assignmentDTO = asc.assignmentNotCompleted(assignmentDTO, assStudList);
+        assignmentDTO = asc.assignmentNotCompleted(assignmentDTO, assStudList, restTemplate);
         EntityModel<AssignmentDTO> assignmentEntity = EntityModel.of(assignmentDTO);
         assignmentEntity.add(assignment.getLinks());
         return assignmentEntity;

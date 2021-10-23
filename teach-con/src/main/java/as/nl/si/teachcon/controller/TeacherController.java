@@ -34,10 +34,11 @@ public class TeacherController {
     @GetMapping("/{id}")
     public EntityModel<Teacher> retrieveTeacher(@PathVariable long id)
     {
+        System.out.println("Hello There");
+
         Optional<Teacher> teacher = repo.findById(id);
         if (!teacher.isPresent())
             throw new TeacherNotFoundException("id: " + id);
-
         EntityModel<Teacher> resource = EntityModel.of(teacher.get()); 						// get the resource
         WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllTeachers()); // get link
         resource.add(linkTo.withRel("all-teachers"));										// append the link

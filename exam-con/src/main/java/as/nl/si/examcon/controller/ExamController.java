@@ -7,12 +7,14 @@ import as.nl.si.examcon.exception.ExamNotFoundException;
 import as.nl.si.examcon.model.Exam;
 import as.nl.si.examcon.model.ExamDto;
 import as.nl.si.examcon.model.studentResponse.StudentResponse;
+import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
@@ -31,6 +33,9 @@ public class ExamController {
 
     @Autowired
     ExamRepository repo;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @GetMapping("/")
     public List<Exam> retrieveAllExams() {
@@ -57,7 +62,7 @@ public class ExamController {
         EntityModel<Exam> exam = retrieveExam(id);
         ExamDto examDto = new ExamDto(exam.getContent());
 
-        examDto = examPassed(examDto);
+        examDto = examPassed(examDto, restTemplate);
         EntityModel<ExamDto> examEntity = EntityModel.of(examDto);
         examEntity.add(exam.getLinks());
         return examEntity;
