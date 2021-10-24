@@ -20,7 +20,7 @@ public class MyApplicationsH2DemoApplication {
     }
 
     public static void main(String[] args) {
-        System.out.println("opdateret 1646");
+        System.out.println("opdateret 2301");
         SpringApplication.run(MyApplicationsH2DemoApplication.class, args);
     }
 

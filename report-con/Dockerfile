@@ -1,6 +1,11 @@
+FROM maven:3.8.3-openjdk-17 AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean -P Docker
+RUN mvn --quiet -f /home/app/pom.xml package -P Docker
+
+
 FROM openjdk:17
-VOLUME /target
-ADD target/my-reports-demo-0.0.1-SNAPSHOT.jar app3.jar
+COPY --from=build /home/app/target/*.jar /usr/local/lib/app.jar
 EXPOSE 8072
-RUN bash -c 'touch /app3.jar'
-ENTRYPOINT ["java","-Dspring.data.mongodb.uri=mongodb://localhost:27017/mongoreport", "-Djava.security.egd=file:/dev/./urandom","-jar","/app3.jar"]
+ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]

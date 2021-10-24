@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 public class TeachConApplication {
 
     public static void main(String[] args) {
-        System.out.println("opdateret 1710");
+        System.out.println("opdateret 2300");
         SpringApplication.run(TeachConApplication.class, args);
     }
 
